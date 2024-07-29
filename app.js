@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log("sever running port 3200");
+  console.log(`sever running port ${process.env.PORT}`);
 });
 
 module.exports = app;
