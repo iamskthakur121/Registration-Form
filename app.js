@@ -2,7 +2,8 @@ const mimi= require("mimi.js");
 const path= require("path");
 const express = require("express");
 const {mongodbManager} = require("mimi.js");
-const mongoDb = new mongodbManager('mongodb://localhost:27017/test');
+const liveuri =('mongodb+srv://iamskthakur121:qwerty123456@cluster0.xdgfsqw.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0')
+const mongoDb = new mongodbManager(liveuri);
 mongoDb.connect().then((result) => {
     console.log("connecting")
     
