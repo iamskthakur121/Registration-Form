@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .data-container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #277f86;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="jsonData"></div>
+    <div class="form-container">
+        <form   id="registrationForm" onsubmit="submitForm(event)">
+            <h2>Registration Form</h2>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required>
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required>
+
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="text" id="mobileNumber" name="mobileNumber" pattern="\d{10}" title="Please enter a valid 10-digit mobile number" required autocomplete="nope">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required>
+
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required>
+
+            <label for="loginId">Login ID:</label>
+            <input type="text" id="loginId" name="loginId" required>
+
+            <label for="Password">Password:</label>
+            <input type="text" id="Password" name="Password"   required>
+            <p id="message" class="error"></p>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <h1>Data from API</h1>
+    <div class="data-container">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                Data will be populated here
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        
+        function validatePassword(password) {
+            const minLength = 8;
+            const maxLength = 20;
+            
+            const hasUpperCase = /[A-Z]/;
+            const hasLowerCase = /[a-z]/;
+            const hasNumber = /\d/;
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+          
+            if (password.length < minLength || password.length > maxLength) {
+              return `Password must be between ${minLength} and ${maxLength} characters long.;`
+            }
+          
+            if (!hasUpperCase.test(password)) {
+              return 'Password must contain at least one uppercase letter.';
+            }
+          
+            if (!hasLowerCase.test(password)) {
+              return 'Password must contain at least one lowercase letter.';
+            }
+          
+            if (!hasNumber.test(password)) {
+              return 'Password must contain at least one number.';
+            }
+          
+            if (!hasSpecialChar.test(password)) {
+              return 'Password must contain at least one special character.';
+            }
+          
+            return 'valid';
+          }
+
+        async function submitForm(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(document.getElementById('registrationForm'));
+            const validationMessage = validatePassword(formData.get('Password'));
+            
+            const messageElement = document.getElementById('message');
+            
+      if (validationMessage !== 'valid') {
+        messageElement.textContent = validationMessage;
+        messageElement.className = 'error';
+        return;
+      } 
+
+            const data = {
+                fname: formData.get('firstName'),
+                lname: formData.get('lastName'),
+                mobile: formData.get('mobileNumber'),
+                email: formData.get('email'),
+                address: {
+                    street: formData.get('street'),
+                    city: formData.get('city'),
+                    state: formData.get('state'),
+                    country: formData.get('country'),
+                },
+                id: formData.get('loginId'),
+                password: formData.get('Password'),
+            };
+
+            try {
+                const response = await fetch('/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    alert("DataSubmited")
+                    const result = await response.json();
+                    document.getElementById('jsonData').innerHTML = JSON.stringify(result);
+                    console.log('Success:', result);
+                } else {
+                    console.error('Error:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        async function fetchData() {
+            try {
+                const response = await fetch('/getall');
+                if (response.ok) {
+                    const data = await response.json();
+                    populateTable(data);
+                } else {
+                    console.error('Failed to fetch data:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function populateTable(data) {
+            const tableBody = document.querySelector('#dataTable tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.fname}</td>
+                    <td>${item.email}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Fetch data when the page loads
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
