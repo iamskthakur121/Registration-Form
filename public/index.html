@@ -80,10 +80,10 @@ button:hover {
         <form   id="registrationForm" onsubmit="submitForm(event)">
             <h2>Registration Form</h2>
             <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required>
+            <input type="text" id="firstName" name="firstName" pattern="[A-Za-z\s]+" required>
 
             <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required>
+            <input type="text" id="lastName" name="lastName" pattern="[A-Za-z\s]+" required>
 
             <label for="mobileNumber">Mobile Number:</label>
             <input type="text" id="mobileNumber" name="mobileNumber" pattern="\d{10}" title="Please enter a valid 10-digit mobile number" required autocomplete="nope">
@@ -92,19 +92,19 @@ button:hover {
             <input type="email" id="email" name="email" required>
 
             <label for="street">Street:</label>
-            <input type="text" id="street" name="street" required>
+            <input type="text" id="street" name="street" pattern="[A-Za-z\s]+" required>
 
             <label for="city">City:</label>
-            <input type="text" id="city" name="city" required>
+            <input type="text" id="city" name="city" pattern="[A-Za-z\s]+" required>
 
             <label for="state">State:</label>
-            <input type="text" id="state" name="state" required>
+            <input type="text" id="state" name="state" pattern="[A-Za-z\s]+" required>
 
             <label for="country">Country:</label>
-            <input type="text" id="country" name="country" required>
+            <input type="text" id="country" name="country" pattern="[A-Za-z\s]+" required>
 
             <label for="loginId">Login ID:</label>
-            <input type="text" id="loginId" name="loginId" required>
+            <input type="text" id="loginId" name="loginId" pattern="[A-Za-z0-9]+" required>
 
             <label for="Password">Password:</label>
             <input type="text" id="Password" name="Password"   required>
