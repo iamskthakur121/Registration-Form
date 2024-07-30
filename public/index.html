@@ -135,8 +135,38 @@ button:hover {
     </div>
 
     <script>
+        function validatePassword(id) {
+        const minLength = 8;
+        const maxLength = 20;
         
-        
+        const hasUpperCase = /[A-Z]/;
+        const hasLowerCase = /[a-z]/;
+        const hasNumber = /\d/;
+        //const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+      
+        if (id.length < minLength || id.length > maxLength) {
+          return `Password must be between ${minLength} and ${maxLength} characters long.`;
+        }
+      
+        if (!hasUpperCase.test(id)) {
+          return 'Password must contain at least one uppercase letter.';
+        }
+      
+        if (!hasLowerCase.test(id)) {
+          return 'Password must contain at least one lowercase letter.';
+        }
+      
+        if (!hasNumber.test(id)) {
+          return 'Password must contain at least one number.';
+        }
+      
+        //if (!hasSpecialChar.test(password)) {
+          //return 'Password must contain at least one special character.';
+        //}
+      
+        return 'valid';
+      }
+
         function validatePassword(password) {
             const minLength = 8;
             const maxLength = 20;
